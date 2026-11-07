@@ -12,7 +12,7 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 #navegar por la pantalla
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.screenmanager import FadeTransition
+from kivy.uix.screenmanager import FadeTransition 
 
 #Colores (rojo, verde, azul, transparencia)
 FONDO = (0.13, 0.13, 0.13, 1) # gris oscuro
