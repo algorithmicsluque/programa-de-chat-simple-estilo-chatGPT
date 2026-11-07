@@ -12,7 +12,7 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 #navegar por la pantalla
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.screenmanager import FadeTransition 
+from kivy.uix.screenmanager import FadeTransition
 
 #Colores (rojo, verde, azul, transparencia)
 FONDO = (0.13, 0.13, 0.13, 1) # gris oscuro
@@ -103,8 +103,11 @@ class PantallaChat(Screen):
         self.entrada.text = ""
         self.entrada.focus = True
 
-        # El bot responde despues de medio segundo(SIEMPRE lo mismo
-        lambda dt: self.agregar_mensaje("hola no más", es_usuario=False)
+        # El bot responde despues de medio segundo(SIEMPRE lo mismo)
+        
+        import ia
+        respuesta = ia.recibir_respuesta(texto) 
+        self.agregar_mensaje(respuesta, es_usuario=False)
 
     def agregar_mensaje(self, texto, es_usuario):
         if es_usuario:
@@ -122,7 +125,7 @@ class PantallaChat(Screen):
         self.lista.add_widget(fila)
 
         #Bajar el scroll hasta el ultimo mensaje
-        Clock.schedule_once(lambda dt: setattr(self.scroll, "croll_y", 0), 0.1)
+        Clock.schedule_once(lambda dt: setattr(self.scroll, "scroll_y", 0), 0.1)
 
 
 #----PANTALLA: ACERCA DE----
@@ -131,7 +134,7 @@ class PantallaAcerca(Screen):
         super().__init__(**Kwargs)
         self.add_widget(Label(
             text="Mi ChatGPT\n\nHecho con Python y Kivy\nVersion 1.0",
-        halign="center", font_size=18))
+            halign="center", font_size=18))
 
 
 #----APP PRINCIPAL----
@@ -143,7 +146,7 @@ class ChatApp(App):
         # Menu de navegacion (arriba)
         menu = BoxLayout(size_hint_y=None, height=50)
         self.botones = {}
-        for nombre, texto in [("inicio", "Inicio"), ("chat", "Chat"), ("acerca", "Acerca de")]:
+        for nombre, texto in [("incio", "Inicio"), ("chat", "Chat"), ("acerca", "Acerca de")]:
             boton = Button(text=texto, background_normal="", background_color=BARRA)
             # n=nombre guarda a que pantalla va cada boton
             boton.bind(on_press=lambda b, n=nombre: self.ir_a(n))
@@ -152,7 +155,7 @@ class ChatApp(App):
         raiz.add_widget(menu)
 
         # Pantallas
-        self.pantallas = ScreenManager (transition=FadeTransition())
+        self.pantallas = ScreenManager(transition=FadeTransition())
         self.pantallas.add_widget(PantallaInicio(name="inicio"))
         self.pantallas.add_widget(PantallaChat(name="chat"))
         self.pantallas.add_widget(PantallaAcerca(name="acerca"))
@@ -169,6 +172,5 @@ class ChatApp(App):
                 boton.background_color = VERDE
             else:
                 boton.background_color = BARRA
-
 
 ChatApp().run()
